@@ -1,12 +1,17 @@
 //Code below this point defines an 'object' called ArbitraryShape.
     //I've set this one up so that's clear how to change the shape
-function ArbitraryShape(x_, y_, size_, theta_, r_, g_, b_, alpha_) {
+function ArbitraryShape(x_, y_, size_, theta_, r_, g_, b_, alpha_, sr_, sg_, sb_, salpha_, sweight_) {
     this.points = [];
     this.posX = x_;
     this.posY = y_;
     this.colorR = r_;
     this.colorG = g_;
     this.colorB = b_;
+    this.strokeH = sr_;
+    this.strokeS = sg_;
+    this.strokeV = sb_;
+    this.strokeWeight = sweight_;
+    this.strokeAlpha = salpha_;
     this.colorAlpha = alpha_;
     
     //this is what you'd think
@@ -36,6 +41,10 @@ function ArbitraryShape(x_, y_, size_, theta_, r_, g_, b_, alpha_) {
         this.posY += dY;
     }
     
+    this.setTheta = function(newTheta) {
+        this.theta = newTheta;
+    }
+    
     this.moveAngle = function(velocity) {
         this.posX += velocity * Math.cos(this.theta * 180 /Math.PI);
         this.posY -= velocity * Math.sin(this.theta * 180 / Math.PI);
@@ -53,11 +62,17 @@ function ArbitraryShape(x_, y_, size_, theta_, r_, g_, b_, alpha_) {
         this.size = dSize;
     }
     
-    this.setColor = function(newR, newG, newB, newA) {
+    this.setColor = function(newR, newG, newB, newA, newSR, newSG, newSB, newSA, newSW) {
         this.colorR = newR;
         this.colorG = newG;
         this.colorB = newB;
         this.colorAlpha = newA;
+        
+        this.strokeH = newSR;
+        this.strokeS = newSG;
+        this.strokeV = newSB;
+        this.strokeAlpha = newSA;
+        this.strokeWeight = newSW;
     }
     
     //I'm not sure this function works. Don't use it.
@@ -93,13 +108,15 @@ function ArbitraryShape(x_, y_, size_, theta_, r_, g_, b_, alpha_) {
         for (i = 0; i < this.points.length; i += 2){
             //i is x, i+1 is y
             
-            rotatedPoints.push(this.size * (this.points[i] * Math.cos(this.theta * 180 / Math.PI) + this.points[i+1] * Math.sin(this.theta * 180 / Math.PI)));
+            rotatedPoints.push(this.size * (this.points[i] * Math.cos(this.theta) + this.points[i+1] * Math.sin(this.theta)));
             
-            rotatedPoints.push(this.size * (this.points[i+1] * Math.cos(this.theta * 180 / Math.PI) - this.points[i] * Math.sin(this.theta * 180 / Math.PI)));
+            rotatedPoints.push(this.size * (this.points[i+1] * Math.cos(this.theta) - this.points[i] * Math.sin(this.theta)));
         }
         
         colorMode(HSB);
         fill(this.colorR, this.colorG, this.colorB, this.colorAlpha);
+        stroke(this.strokeH, this.strokeS, this.strokeV, this.strokeAlpha);
+        strokeWeight(this.strokeWeight);
         
         //start drawing a multi-vertex shape
         beginShape();
