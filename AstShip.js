@@ -42,7 +42,7 @@ function AstShip(x_, y_, theta_, h_, s_, v_, kbd_, se_, size_) {
     this.velocity = new YCVector2(0, 0);
     this.dTheta = 0;
     
-    this.shape = new ArbitraryShape(this.posX, this.posY, this.size, this.theta, 0, 0, 0, 255, this.h, this.s, this.v, 255, 2);
+    this.shape = new ArbitraryShape(this.posX, this.posY, this.size, this.theta, 0, 0, 0, 255, this.SE.getHue(), this.s, this.SE.getIntensity(), 255, width/300);
     
     this.shape.addPoint(10, 0);
     this.shape.addPoint(-10, 10);
@@ -50,14 +50,21 @@ function AstShip(x_, y_, theta_, h_, s_, v_, kbd_, se_, size_) {
     this.shape.addPoint(-10, -10);
     this.shape.addPoint(10, 0);
     
+    this.lives = 2;
+    
+    var framesSinceKill = 0;
+    
     this.rubble = [];
     
-    this.update = function(intensity) {
+    this.update = function(intensity, hue) {
         //KBD is the keyboard array
         
         //state 0: spawning, and
         //state 1: active
         if (this.state < 2) { 
+            
+            this.shape.setColor(0, 0, 0, 255, this.SE.getHue(), this.s, this.SE.getIntensity(), 255, width/300);
+            
             if (this.state == 0) {
                 if (this.spawnTimer > 200) this.state = 1;
 
@@ -109,7 +116,7 @@ function AstShip(x_, y_, theta_, h_, s_, v_, kbd_, se_, size_) {
 
             if (this.KBD.bwd) {
                 //decelerate
-                if (this.velocity.getMagnitude() < 0.1) {
+                if (this.velocity.getMagnitude() < 0.05) {
                     this.velocity.set(0, 0);
                 } else {
                     this.velocity.scale(0.96);
@@ -148,7 +155,40 @@ function AstShip(x_, y_, theta_, h_, s_, v_, kbd_, se_, size_) {
         }
         //state 2: dying
         else {
+            let rubbleCuller = [];
+            for (var panguin = 0; panguin < this.rubble.length; panguin++) {
+                this.rubble[panguin].update(intensity, hue);
+                if ((this.rubble[panguin].pos.x < -10 || this.rubble[panguin].pos.x > 500) || (this.rubble[panguin].pos.y < -10 || this.rubble[panguin].pos.y > 400)) {
+                    rubbleCuller.push(panguin);
+                }
+            }
             
+            function sortbaby(a, b) {
+                return b - a;
+            }
+            rubbleCuller.sort(sortbaby);
+            
+            for (var penumbra = 0; penumbra < rubbleCuller.length; penumbra++) {
+                if (rubbleCuller[penumbra] > -1) {
+                    this.rubble.splice(rubbleCuller[penumbra], 1);
+                }
+            }
+            
+            if (framesSinceKill == 200) {
+                this.state = 0;
+                this.velocity = new YCVector2(0, 0);
+                this.posX = x_;
+                this.posY = y_;
+                this.theta = theta_;
+                this.rubble = [];
+                this.spawnTimer = 0;
+                
+                this.shape.relocate(this.posX, this.posY);
+                this.shape.setTheta(this.theta);
+                this.shape.setColor(0, 0, 0, 255, this.SE.getHue(), this.s, this.SE.getIntensity(), 255, width/300);
+            }
+            
+            framesSinceKill++;
             
         }
         
@@ -161,9 +201,16 @@ function AstShip(x_, y_, theta_, h_, s_, v_, kbd_, se_, size_) {
         text("theta: " + this.theta.toFixed(3), 10, 270);
         text("finTheta: " + this.finTheta.toFixed(3), 10, 280);
         
+        text("Color: (" + this.SE.getHue().toFixed(1) + ", 100, " + this.SE.getIntensity() + ")", 10, 300);
+        text("Lives: " + this.lives, 10, 310);
+        
         text("velocity: (" + this.velocity.x.toFixed(1) + ", " + this.velocity.y.toFixed(1) + ")", 200, 260);
         text("position: (" + this.posX.toFixed(1) + ", " + this.posY.toFixed(1) + ")", 200, 270);
         text("speed: " + this.velocity.getMagnitude().toFixed(3), 200, 280);
+        text("Debris: " + this.rubble.length, 200, 290);
+        text("State: " + this.state, 200, 300);
+        
+        
     }
     
     this.draw = function() {
@@ -176,24 +223,64 @@ function AstShip(x_, y_, theta_, h_, s_, v_, kbd_, se_, size_) {
         
         if (this.state == 1 || (this.state == 0 && !this.flash)) {
             this.shape.draw();
-        } else {
+        } else if (this.state == 2){
+            
+            //this.shape.draw();
+            
             for (var picante = 0; picante < this.rubble.length; picante++) {
                 this.rubble[picante].draw();
             }
+            
+            //text("Debris[0]: (" + this.rubble[0].getX() + ", " + this.rubble[0].getY() + ")", 200, 300);
         }
         
     }
     
+    //todo: add Asteroid's velocity to death considerations?
+    
     //this kills the man
     this.kill = function() {
+        var basePosition;
+        var debBosition;
+        var debVelocity;
+        var newDeb;
+        
+        
+        
+        
         if (this.state != 0) {
+            
+            framesSinceKill = 0;
+            
+            this.lives--;
+            
+            for (var pepsi = 0; pepsi < 30; pepsi++) {
+                //generate random position [-5, 5]
+                //generate velocity, outward from origin
+                //create Debris with pos+this.pos and vel+this.vel
+
+                //(pos_, vel_, se_, h_, s_, v_)
+
+                basePosition = new YCVector2(Math.random()*10 - 5, Math.random()*10 - 5);
+                debBosition = new YCVector2(basePosition.x * 2 + this.posX, basePosition.y * 2 + this.posY);
+                debVelocity = new YCVector2(basePosition.x * basePosition.getMagnitude() / 18 + this.velocity.x, basePosition.y * basePosition.getMagnitude() / 18 + this.velocity.y);
+                
+                //debVelocity.scale(debVelocity.getMagnitude());
+
+                this.rubble.push(new Debris(debBosition, debVelocity, this.SE, this.h, this.s, this.v));
+            }
+            
             this.state = 2;
+            this.posX = -413;
+            this.posY = -413;
         }
         
     }
     
     this.setColor = function(h_, s_, v_) {
+        this.h = (Math.random() * 360);
         
+        this.shape.setColor(0, 0, 0, 255, this.h, 100, 100, 100, 2);
     }
     
 }

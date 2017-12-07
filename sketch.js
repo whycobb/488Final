@@ -23,7 +23,7 @@ var foward = false, reverse = false, clockwise = false, counterClockwise = false
 
 function setup() {
     //put setup code here
-    createCanvas(1000, 800);
+    createCanvas(500, 400);
     
     KBD = new KBDArray;
     
@@ -37,7 +37,8 @@ function setup() {
 
 function draw() {
     clear();
-    background(0, 50, 120);
+    //background(0, 50, 120);
+    background(0, 0, 0);
     
     //get input
     KBD.setCCW(keyIsDown(LEFT_ARROW));
@@ -46,6 +47,7 @@ function draw() {
     KBD.setBWD(keyIsDown(DOWN_ARROW));
     KBD.setPause(keyIsDown(80));
     KBD.setFire(keyIsDown(32));
+    KBD.setK(keyIsDown(75))
     
     
     

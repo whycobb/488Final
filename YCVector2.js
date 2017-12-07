@@ -16,6 +16,19 @@ function YCVector2(val1, val2) {
         this.y += otherVec.y;
     }
     
+    //subtracts val1 from x and val2 from y
+    this.sub = function(val1, val2) {
+        this.x -= val1;
+        this.y -= val2;
+    }
+    
+    //subtracts given YCVector2 from this one
+    this.subVec = function(otherVec) {
+        this.x -= otherVec.x;
+        this.y -= otherVec.y;
+    }
+    
+    
     //scales the whole vector by given amount (val 1 makes no change)
     this.scale = function(val) {
         this.x *= val;

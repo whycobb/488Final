@@ -5,6 +5,7 @@ function KBDArray() {
     this.bwd = false;
     this.fire = false;
     this.pause = false;
+    this.k = false;
     
     this.update = function() {
         //call this function at the end of a frame to wipe the array
@@ -14,6 +15,7 @@ function KBDArray() {
         this.bwd = false;
         this.pause = false;   
         this.fire = false;
+        this.k = false;
     }
     
     this.setCW = function(in_) {
@@ -38,5 +40,9 @@ function KBDArray() {
     
     this.setFire = function(in_) {
         this.fire = in_;
+    }
+    
+    this.setK = function(in_) {
+        this.k = in_;
     }
 }
