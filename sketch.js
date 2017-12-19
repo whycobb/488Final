@@ -26,7 +26,7 @@ var foward = false, reverse = false, clockwise = false, counterClockwise = false
 
 
 function preload() {
-    mySound = loadSound("sardon.wav");
+    mySound = loadSound("volume.mp3");
 }
 
 function setup() {
