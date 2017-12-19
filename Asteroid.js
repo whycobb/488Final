@@ -34,24 +34,42 @@ function Asteroid(pos_, vel_, se_, size_, health_) {
     
     var shapeVersion = Math.random() * 6;
     
-    if (shapeVersion < 3) {
+    if (shapeVersion < 1) {
         this.shape.addPoint(40,0);
+        this.shape.addPoint(29, 29);
         this.shape.addPoint(0,40);
+        this.shape.addPoint(-29, 29);
         this.shape.addPoint(-40,0);
+        this.shape.addPoint(-29, -29);
         this.shape.addPoint(0,-40);
+        this.shape.addPoint(20, -20);
+        this.shape.addPoint(35, -29);
         this.shape.addPoint(40,0);
-    } else if (shapeVersion < 4) {
-        this.shape.addPoint(40,0);
-        this.shape.addPoint(0,50);
-        this.shape.addPoint(-40,0);
-        this.shape.addPoint(0,-40);
-        this.shape.addPoint(40,0);
-    } else if (shapeVersion < 6) {
-        this.shape.addPoint(40,0);
-        this.shape.addPoint(0,40);
-        this.shape.addPoint(-40,10);
-        this.shape.addPoint(0,-40);
-        this.shape.addPoint(60,0);
+    } else {
+        let shapeDX = Math.random() * 2;
+        let shapeDY = Math.random() * 2;
+        this.shape.addPoint(40 - shapeDX, 0 - shapeDY);
+        this.shape.addPoint(34 - Math.random() * 4, 22 - Math.random() * 4);
+        this.shape.addPoint(31 - Math.random() * 4,28 - Math.random() * 4);
+        this.shape.addPoint(16 - Math.random() * 4,36 - Math.random() * 4);
+        this.shape.addPoint(9 - Math.random() * 4,37 - Math.random() * 4);
+        this.shape.addPoint(8 - Math.random() * 4, 30 - Math.random() * 4);
+        this.shape.addPoint(0 - Math.random() * 4,40 - Math.random() * 4);
+        this.shape.addPoint(-24 - Math.random() * 4, 37 - Math.random() * 4);
+        this.shape.addPoint(-21 - Math.random() * 4, 31 - Math.random() * 4);
+        this.shape.addPoint(-34 - Math.random() * 4, 24 - Math.random() * 4);
+        this.shape.addPoint(-41 - Math.random() * 4, 4 - Math.random() * 4);
+        this.shape.addPoint(-40 - Math.random() * 4,0 - Math.random() * 4);
+        this.shape.addPoint(-40 - Math.random() * 4, -9 - Math.random() * 4);
+        this.shape.addPoint(-30 - Math.random() * 4, -16 - Math.random() * 4);
+        this.shape.addPoint(-12 - Math.random() * 4, -28 - Math.random() * 4);
+        this.shape.addPoint(-8 - Math.random() * 4, -36 - Math.random() * 4);
+        this.shape.addPoint(0 - Math.random() * 4, -40 - Math.random() * 4);
+        this.shape.addPoint(20 - Math.random() * 4, -37 - Math.random() * 4);
+        this.shape.addPoint(32 - Math.random() * 4, -24 - Math.random() * 4);
+        this.shape.addPoint(31 - Math.random() * 4, -23 - Math.random() * 4);
+        this.shape.addPoint(39 - Math.random() * 4,-17 - Math.random() * 4);
+        this.shape.addPoint(40 - shapeDX, 0 - shapeDY);
     }
     
     
@@ -89,14 +107,21 @@ function Asteroid(pos_, vel_, se_, size_, health_) {
     this.draw = function() {
         //console.log("Drawing Asteroid...");
         
-        
+        /*
+        push();
+        colorMode(HSB);
+        noStroke();
+        fill(160, 50, 50, 50);
+        ellipse(this.pos.x, this.pos.y, this.size*80, this.size*80);
+        pop();*/
         
         this.shape.draw();
         
-        push()
+        /*
+        push();
         colorMode(RGB);
         fill(255, 0, 0);
         text(this.health, this.pos.x, this.pos.y);
-        pop();
+        pop();*/
     }
 }

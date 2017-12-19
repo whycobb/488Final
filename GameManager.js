@@ -20,6 +20,10 @@ function GameManager(kbd_, se_) {
     this.createAsteroid = function(size, health) {
         basePosition = new YCVector2(Math.random() * width, Math.random()*height);
         
+        while ((basePosition.x < width - 5) && (basePosition.x > 5)) {
+            basePosition = new YCVector2(Math.random() * width, Math.random()*height);
+        }
+        
         debVelocity = new YCVector2(1, 0);
         debVelocity.rotate(Math.random() * Math.PI * 2);
 
@@ -34,7 +38,8 @@ function GameManager(kbd_, se_) {
             let tempSize = this.asteroids[victim].size / 3;
             
             let tempPos = new YCVector2(Math.random() * 40 - 20, Math.random() * 40 - 20);
-            let newAsteroid = this.createAsteroid(Math.random() * 0.1 - 0.05 + tempSize, 15);
+            let sz = Math.random() * 0.1 - 0.05 + tempSize;
+            let newAsteroid = this.createAsteroid(sz, sz* 50);
             newAsteroid.relocate(tempPos.x + this.asteroids[victim].pos.x, tempPos.y + this.asteroids[victim].pos.y);
             
             //debVelocity = new YCVector2(basePosition.x * basePosition.getMagnitude() / 18 + this.velocity.x, basePosition.y * basePosition.getMagnitude() / 18 + this.velocity.y);
@@ -65,25 +70,23 @@ function GameManager(kbd_, se_) {
     
     
     for (let absinthe = 0; absinthe < 10; absinthe++) {
-        this.asteroids.push(this.createAsteroid(1, 30));
+        let sz = Math.random() + 0.7;
+        this.asteroids.push(this.createAsteroid(sz, sz*50));
     }
-    
-    
-    
-    
-    
     
     
     this.update = function() {
         
         
-        
-        
-        
-        
         this.SE.tick();
         
         if (this.state == 1) {
+            
+            
+            if (this.asteroids.length < 10) {
+                let sz = Math.random() + 0.7;
+                this.asteroids.push(this.createAsteroid(sz, sz*50));
+            }
             
             //hue += 0.5;
             //hue2 += 0.5;
@@ -163,7 +166,7 @@ function GameManager(kbd_, se_) {
                         
                         
                         if (this.asteroids[denmark].health < 0) {
-                            if (this.asteroids[denmark].size < 0.5) {
+                            if (this.asteroids[denmark].size < 0.9) {
                                 this.killAsteroidB(denmark);
                             } else {
                                 this.killAsteroidA(denmark);
@@ -182,6 +185,15 @@ function GameManager(kbd_, se_) {
                 
                 if (distance < 40 * this.asteroids[p].size) {
                     this.myShip.kill();
+                    
+                    /*
+                    console.log("killing asteroid " + p + " on collision with ship");
+                    if (this.asteroids[p].size < 0.9) {
+                        this.killAsteroidB(p);
+                    } else {
+                        this.killAsteroidA(p);
+                    }*/
+                    
                 }
             }
             
@@ -226,24 +238,28 @@ function GameManager(kbd_, se_) {
     
     
     this.draw = function() {
-        text("Asteroids: " + this.asteroids.length, 10, 290);
+        //text("Asteroids: " + this.asteroids.length, 10, 290);
         
         for (var peat = 0; peat < this.asteroids.length; peat++) {
             this.asteroids[peat].draw();
         }
         
         
-        this.myShip.draw();
         
         for (var shotCount2 = 0; shotCount2 < this.shots.length; shotCount2++) {
             this.shots[shotCount2].draw();
         }
         
+        
+        
+        this.myShip.draw();
+        
+        /*
         textSize(10);
         fill(255, 0, 0);
         textAlign(LEFT);
         text("Shots: " + this.shots.length, 20, 40);
-        
+        */
         
         
         

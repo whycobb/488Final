@@ -16,10 +16,18 @@ var velocityX;
 var velocityY;
 var velocity;
 
+var mySound;
+
 var myCanvas;
 var myCTX;
 
 var foward = false, reverse = false, clockwise = false, counterClockwise = false;
+
+
+
+function preload() {
+    mySound = loadSound("sardon.wav");
+}
 
 function setup() {
     //put setup code here
@@ -27,7 +35,11 @@ function setup() {
     
     KBD = new KBDArray;
     
-    SE = new SoundEngine;
+    SE = new SoundEngine(mySound);
+    
+    if (!mySound.isPlaying()) {
+        mySound.play();
+    }
     
     //weed
     
@@ -58,9 +70,9 @@ function draw() {
     
     GM.draw();
     
-    
+    /*
     textSize(10);
     fill(255, 0, 0);
     textAlign(LEFT);
-    text("Framerate: " + getFrameRate(), 5, 190);
+    text("Framerate: " + getFrameRate(), 5, 190);*/
 }

@@ -63,7 +63,7 @@ function AstShip(x_, y_, theta_, h_, s_, v_, kbd_, se_, size_) {
         //state 1: active
         if (this.state < 2) { 
             
-            this.shape.setColor(0, 0, 0, 255, this.SE.getHue(), this.s, this.SE.getIntensity(), 255, width/300);
+            this.shape.setColor(0, 0, 0, 255, this.SE.getHue(), this.SE.getIntensity(), this.SE.getIntensity(), 255, width/300);
             
             if (this.state == 0) {
                 if (this.spawnTimer > 200) this.state = 1;
@@ -74,12 +74,12 @@ function AstShip(x_, y_, theta_, h_, s_, v_, kbd_, se_, size_) {
                 this.spawnTimer++;
             }
             
-            
+            /*
             if (this.KBD.fire) {
                 //fire weapon
                 fill(255, 0, 0);
                 ellipse(280, 260, 50, 20);
-            }
+            }*/
 
             this.rotating = false;
 
@@ -195,6 +195,7 @@ function AstShip(x_, y_, theta_, h_, s_, v_, kbd_, se_, size_) {
         
         //this.shape.setColor(0, 0, 0, 0, Math.random() * 360, 255, 255, 255);
         
+        /*
         textAlign(LEFT);
         textSize(10);
         text("dTheta: " + this.dTheta.toFixed(3), 10, 260);
@@ -209,17 +210,18 @@ function AstShip(x_, y_, theta_, h_, s_, v_, kbd_, se_, size_) {
         text("speed: " + this.velocity.getMagnitude().toFixed(3), 200, 280);
         text("Debris: " + this.rubble.length, 200, 290);
         text("State: " + this.state, 200, 300);
-        
+        */
         
     }
     
     this.draw = function() {
+        /*
         fill(255, 0, 0);
         //if (this.KBD.fire) rect(280, 260, 50, 20);
         if (this.KBD.cw) rect(400, 260, 20, 20);
         if (this.KBD.ccw) rect(340, 260, 20, 20);
         if (this.KBD.fwd) rect(370, 230, 20, 20);
-        if (this.KBD.bwd) rect(370, 260, 20, 20);
+        if (this.KBD.bwd) rect(370, 260, 20, 20);*/
         
         if (this.state == 1 || (this.state == 0 && !this.flash)) {
             this.shape.draw();
@@ -278,9 +280,9 @@ function AstShip(x_, y_, theta_, h_, s_, v_, kbd_, se_, size_) {
     }
     
     this.setColor = function(h_, s_, v_) {
-        this.h = (Math.random() * 360);
+        //this.h = (Math.random() * 360);
         
-        this.shape.setColor(0, 0, 0, 255, this.h, 100, 100, 100, 2);
+        this.shape.setColor(0, 0, 0, 255, h_, s_, v_, 100, 2);
     }
     
 }
