@@ -240,14 +240,16 @@ function GameManager(kbd_, se_) {
     this.draw = function() {
         //text("Asteroids: " + this.asteroids.length, 10, 290);
         
-        for (var peat = 0; peat < this.asteroids.length; peat++) {
-            this.asteroids[peat].draw();
-        }
+        
         
         
         
         for (var shotCount2 = 0; shotCount2 < this.shots.length; shotCount2++) {
             this.shots[shotCount2].draw();
+        }
+        
+        for (var peat = 0; peat < this.asteroids.length; peat++) {
+            this.asteroids[peat].draw();
         }
         
         
