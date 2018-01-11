@@ -31,7 +31,7 @@ function preload() {
 
 function setup() {
     //put setup code here
-    createCanvas(500, 400);
+    createCanvas(500, 450);
     
     KBD = new KBDArray;
     
